@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/oficinas','OficinasController@index'); ##crear dos rutas
-Route::get('/oficinas/create','OficinasController@create'); ##crear dos rutas
-Route::get('/oficinas/store','OficinasController@store'); ##crear dos rutas
+Route::get('/oficinas','OficinasController@index'); 
+Route::get('/oficinas/create','OficinasController@create'); 
+Route::post('/oficinas/store','OficinasController@store'); 
+
+

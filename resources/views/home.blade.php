@@ -16,7 +16,7 @@
                         <p>
                             usuario logeado {{Session::get('idUsuario')}}
                         </p>
-                    You are logged in!
+                        <a href="/oficinas/create">Crear Oficinas</a>
                 </div>
             </div>
         </div>

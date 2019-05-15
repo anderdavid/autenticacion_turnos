@@ -6,10 +6,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use \App\Turno;
+use \App\Oficina;
+use App\Seeder\TurnosTableSeeder;
 use Session;
 
 class OficinasController extends Controller
 {
+
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        //Session::put('key', auth()->id());
+      
+
+    } 
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +34,8 @@ class OficinasController extends Controller
      */
     public function index()
     {
-        echo "index";
+        $oficinas = \App\Oficina::all();
+        return view('viewOficinas', ['name'=>'yo','oficinas'=>$oficinas]);
     }
 
     /**
@@ -27,8 +45,9 @@ class OficinasController extends Controller
      */
     public function create()
     {
-        echo "create";
-        $this->createTurnos();
+       /* echo "create";
+        $this->createTurnos();*/
+        return view('createOficina', ['name'=>'yo']);
     }
 
     /**
@@ -40,6 +59,21 @@ class OficinasController extends Controller
     public function store(Request $request)
     {
         echo "store";
+        
+        $oficina =new \App\Oficina;
+        $oficina->empresa =$request->empresa;
+        $oficina->administrador=$request->administrador;
+        $oficina->ciudad=$request->ciudad;
+
+        if($oficina->save()){
+            echo "oficina guardada<br>";
+            echo "oficina-id: ".$oficina->id;
+            $this->createTurnosByOfice($oficina->id);
+
+            return redirect('/oficinas');
+        }else{
+            echo "Error al guardar oficina";
+        } 
     }
 
     /**
@@ -87,7 +121,23 @@ class OficinasController extends Controller
         //
     }
 
+    public function createTurnosByOfice($oficinaId){
 
+        echo "createTurnosByOfice<br>";
+       
+        Artisan::call("make:model Turno -m");
+        $turno = new Turno;
+        $turno->setTable("turnos".$oficinaId);
+        echo "turno:".$turno->getMTable()."<br>";
+
+        Session::put('idOficina',$oficinaId);
+
+        Artisan::call("db:seed --class=TurnosTableSeeder");
+        Artisan::call("make:migration agregar_campo_x");
+        Artisan::call("migrate --seed");
+
+        echo "Turno creado";
+    }
     public function createTurnos(){
         
 
@@ -98,9 +148,6 @@ class OficinasController extends Controller
          Artisan::call("db:seed --class=TurnosTableSeeder");
          Artisan::call("make:migration agregar_campo_x");
          Artisan::call("migrate --seed");
-         
-        /* Artisan::call("migrate:refresh --seed");*/
-
          echo "Turno creado";
     }
 }

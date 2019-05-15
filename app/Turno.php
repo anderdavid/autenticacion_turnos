@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Turno extends Model
 {
-    protected $table = 'turnos45';
+    protected $table = 'turnos';
 
-    public function setTable($mTable){
-    	$this->table = $mTable;
+    public function setTable($nTable){
+    	$this->table = $nTable;
     }
 
     public function getMTable(){

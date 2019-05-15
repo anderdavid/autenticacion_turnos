@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/oficinas','OficinasController@index'); ##crear dos rutas
+Route::get('/oficinas/create','OficinasController@create'); ##crear dos rutas
+Route::get('/oficinas/store','OficinasController@store'); ##crear dos rutas
